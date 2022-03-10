@@ -32,6 +32,10 @@ elseif (APPLE)
 endif()
 ```
 
+If using Ninja or Makefile as generator regardless of IDE, make sure the working directory is set to the `glsl/` directory before debugging and running.
+
+
+
 ## Build instructions
 For all platforms:
 ```bash
