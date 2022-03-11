@@ -85,7 +85,7 @@ add_executable(example9
     src/example9.cpp)
 
 # Debugging
-if (WIN32)
+if (MSVC)
     set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT example0)
     set_property(TARGET example0
         PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/glsl")
@@ -108,7 +108,7 @@ if (WIN32)
     set_property(TARGET example9
         PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/glsl")
 
-elseif (APPLE)
+elseif (CMAKE_GENERATOR STREQUAL Xcode)
     set_property(TARGET example0 
         PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/glsl")
     set_property(TARGET example1 
