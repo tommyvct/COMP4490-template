@@ -129,5 +129,5 @@ elseif (CMAKE_GENERATOR STREQUAL Xcode)
     set_property(TARGET example9 
         PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/glsl")
 else()
-    message(NOTICE "Please make sure the working directory is set to the glsl/ directory before debugging and running.")
+    message(NOTICE "Please make sure the working directory is set to the glsl directory before debugging and running.")
 endif()
