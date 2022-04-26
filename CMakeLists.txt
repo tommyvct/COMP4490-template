@@ -3,11 +3,14 @@ project(COMP4490)
 
 set(CMAKE_CXX_STANDARD 11)
 
+option(OPENMP "Use OpenMP acceleration" ON)
+
 # Dependencies
 include_directories("./glm")
 
 if (WIN32)
     add_compile_definitions(FREEGLUT_STATIC)
+    add_compile_definitions(FREEGLUT_LIB_PRAGMAS=0)
     set(GLUT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/freeglut/include/")
     set(GLUT_glut_LIBRARY_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/freeglut/lib/freeglut_staticd.lib")
     set(GLUT_glut_LIBRARY_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/freeglut/lib/freeglut_static.lib")
@@ -40,7 +43,7 @@ include_directories(${GLUT_INCLUDE_DIR})
 include_directories(${GLEW_INCLUDE_DIR})
 
 link_libraries(${OPENGL_opengl_LIBRARY})
-link_libraries(${GLUT_LIBRARY})
+link_libraries(${GLUT_LIBRARIES})
 link_libraries(${GLEW_LIBRARIES})
 
 # Targets
@@ -83,6 +86,24 @@ add_executable(example8
 add_executable(example9 
     src/main.cpp 
     src/example9.cpp)
+
+
+if(OPENMP)
+    find_package(OpenMP)
+
+    if(OpenMP_CXX_FOUND)
+        target_link_libraries(example0 PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(example1 PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(example2 PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(example3 PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(example4 PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(example5 PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(example6 PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(example7 PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(example8 PUBLIC OpenMP::OpenMP_CXX)
+        target_link_libraries(example9 PUBLIC OpenMP::OpenMP_CXX)
+    endif()
+endif()
 
 # Debugging
 if (MSVC)
@@ -129,5 +150,5 @@ elseif (CMAKE_GENERATOR STREQUAL Xcode)
     set_property(TARGET example9 
         PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/glsl")
 else()
-    message(NOTICE "Please make sure the working directory is set to the glsl directory before debugging and running.")
+    message(NOTICE "Please make sure the working directory is set to ${CMAKE_CURRENT_SOURCE_DIR}/glsl before debugging and running.")
 endif()
