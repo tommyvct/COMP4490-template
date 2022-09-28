@@ -59,7 +59,7 @@ cd ../glsl
 ### macOS Specific
 CMake cannot set the working directory for Xcode debugging. To manually set the working directory for debugging, go to `Product` -> `Scheme` -> `Edit Scheme`, under `Options` tab, tick `Use custom working directory` and set it to where the GLSL shaders are.
 
-## Linux/Unix Specific
+### Linux/Unix Specific
 OpenGL related libraries are to be installed via package manager first.
 
 For Ubuntu, the following packages need to be installed:
