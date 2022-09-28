@@ -54,8 +54,7 @@ cd ../glsl
 ```
 
 ### Windows Specific
-- If using Visual Studio, `-A"Win32"` is required since the bundled libraries are 32-bit.
-- Make sure the the startup project is assigned to a project other `ALL_BUILD` and `ZERO_CHECK`.
+- Make sure the the startup project is assigned to a project other than `ALL_BUILD` and `ZERO_CHECK`.
 
 ### macOS Specific
 CMake cannot set the working directory for Xcode debugging. To manually set the working directory for debugging, go to `Product` -> `Scheme` -> `Edit Scheme`, under `Options` tab, tick `Use custom working directory` and set it to where the GLSL shaders are.
