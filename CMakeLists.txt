@@ -1,155 +1,45 @@
 cmake_minimum_required(VERSION 3.21)
-project(COMP4490)
+project(COMP4490
+    DESCRIPTION "COMP4490 OpenGL cross-platform template"
+    LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 11)
-set(WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/glsl")
+set(CMAKE_CXX_STANDARD 17)
 
 option(OPENMP "Use OpenMP acceleration" ON)
+option(STATIC_GLEW "Use and link with static GLEW" OFF)
+option(STATIC_FREEGLUT "Use and link with static freeGLUT" OFF)
 
 # Dependencies
-include_directories("./glm")
+# Don't do this as this applies globally for anything on and below this level 
+# GLM is a header-only library, so we can let this slide
+# This will be problematic as soon you have this library have another dependencies 
+# include_directories("./glm")
 
-if (WIN32)
-    add_compile_definitions(FREEGLUT_STATIC)
-    add_compile_definitions(FREEGLUT_LIB_PRAGMAS=0)
-    set(GLUT_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/freeglut/include/")
-    set(GLUT_glut_LIBRARY_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/freeglut/lib/freeglut_staticd.lib")
-    set(GLUT_glut_LIBRARY_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/freeglut/lib/freeglut_static.lib")
 
-    add_compile_definitions(GLEW_STATIC)
-    set(GLEW_USE_STATIC_LIBS TRUE)
-    set(GLEW_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/glew/include/")
-    set(GLEW_STATIC_LIBRARY_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/glew/lib/glew32s.lib")
-    set(GLEW_STATIC_LIBRARY_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/glew/lib/glew32s.lib")
-    set(GLEW_SHARED_LIBRARY_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/glew/lib/glew32.lib")
-    set(GLEW_SHARED_LIBRARY_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/glew/lib/glew32.lib")
-elseif (APPLE)
-    link_libraries("-framework OpenGL")
+list(APPEND CMAKE_PREFIX_PATH "./contrib/install")
 
-    add_compile_definitions(GLEW_STATIC)
-    set(GLEW_USE_STATIC_LIBS TRUE)
-    set(GLEW_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/glew/include/")
-    set(GLEW_STATIC_LIBRARY_RELEASE "${CMAKE_CURRENT_SOURCE_DIR}/glew/lib/libGLEW.a")
-    set(GLEW_STATIC_LIBRARY_DEBUG "${CMAKE_CURRENT_SOURCE_DIR}/glew/lib/libGLEW.a")
-
-    set(CMAKE_XCODE_GENERATE_SCHEME TRUE)
+if(STATIC_GLEW)
+    set(GLEW_USE_STATIC_LIBS ON)
 endif()
 
 find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
+find_package(FreeGLUT REQUIRED)
 find_package(GLEW REQUIRED)
+find_package(GLM REQUIRED)
 
-include_directories(${OPENGL_INCLUDE_DIR})
-include_directories(${GLUT_INCLUDE_DIR})
-include_directories(${GLEW_INCLUDE_DIR})
-
-link_libraries(${OPENGL_opengl_LIBRARY})
-link_libraries(${GLUT_LIBRARIES})
-link_libraries(${GLEW_LIBRARIES})
-
-# Targets
-add_executable(example0 
-    src/main.cpp 
-    src/example0.cpp)
-
-add_executable(example1 
-    src/main.cpp 
-    src/example1.cpp)
-
-add_executable(example2 
-    src/main.cpp 
-    src/example2.cpp)
-
-add_executable(example3 
-    src/main.cpp 
-    src/example3.cpp)
-
-add_executable(example4 
-    src/main.cpp 
-    src/example4.cpp)
-
-add_executable(example5 
-    src/main.cpp 
-    src/example5.cpp)
-
-add_executable(example6 
-    src/main.cpp 
-    src/example6.cpp)
-
-add_executable(example7 
-    src/main.cpp 
-    src/example7.cpp)
-    
-add_executable(example8 
-    src/main.cpp 
-    src/example8.cpp)
-
-add_executable(example9 
-    src/main.cpp 
-    src/example9.cpp)
 
 
 if(OPENMP)
     find_package(OpenMP)
-
-    if(OpenMP_CXX_FOUND)
-        target_link_libraries(example0 PUBLIC OpenMP::OpenMP_CXX)
-        target_link_libraries(example1 PUBLIC OpenMP::OpenMP_CXX)
-        target_link_libraries(example2 PUBLIC OpenMP::OpenMP_CXX)
-        target_link_libraries(example3 PUBLIC OpenMP::OpenMP_CXX)
-        target_link_libraries(example4 PUBLIC OpenMP::OpenMP_CXX)
-        target_link_libraries(example5 PUBLIC OpenMP::OpenMP_CXX)
-        target_link_libraries(example6 PUBLIC OpenMP::OpenMP_CXX)
-        target_link_libraries(example7 PUBLIC OpenMP::OpenMP_CXX)
-        target_link_libraries(example8 PUBLIC OpenMP::OpenMP_CXX)
-        target_link_libraries(example9 PUBLIC OpenMP::OpenMP_CXX)
+    if(NOT OpenMP_CXX_FOUND)
+        message(WARNING "OpenMP not found or not supported by the toolchain, skipping OpenMP acceleration support.")
     endif()
 endif()
 
-# Debugging
-if (MSVC)
-    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT example0)
-    set_property(TARGET example0
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-    set_property(TARGET example1
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-    set_property(TARGET example2
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-    set_property(TARGET example3
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-    set_property(TARGET example4
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-    set_property(TARGET example5
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-    set_property(TARGET example6
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-    set_property(TARGET example7
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-    set_property(TARGET example8
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-    set_property(TARGET example9
-        PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${WORKING_DIRECTORY}")
-elseif (CMAKE_GENERATOR STREQUAL Xcode)
-    set_property(TARGET example0 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-    set_property(TARGET example1 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-    set_property(TARGET example2 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-    set_property(TARGET example3 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-    set_property(TARGET example4 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-    set_property(TARGET example5 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-    set_property(TARGET example6 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-    set_property(TARGET example7 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-    set_property(TARGET example8 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-    set_property(TARGET example9 
-        PROPERTY XCODE_SCHEME_WORKING_DIRECTORY "$(WORKING_DIRECTORY)")
-else()
-    message(NOTICE "Please make sure the working directory is set to ${WORKING_DIRECTORY} before debugging and running.")
-endif()
+
+
+# Targets
+add_subdirectory(src)
+# Visual Studio startup project
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT example0)
+
