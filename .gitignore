@@ -37,3 +37,6 @@ build/**
 **/Debug/**
 **/Release/**
 .idea/**
+contrib/build**/
+contrib/install/
+build/

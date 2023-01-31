@@ -4,6 +4,3 @@
 [submodule "contrib/freeglut"]
 	path = contrib/freeglut
 	url = https://github.com/FreeGLUTProject/freeglut.git
-[submodule "contrib/glew"]
-	path = contrib/glew
-	url = https://github.com/nigels-com/glew.git
