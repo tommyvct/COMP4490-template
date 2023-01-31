@@ -1,5 +1,5 @@
 macro(LINKDEPENDENCIES TARGET_NAME)
-    target_link_libraries(${TARGET_NAME} PRIVATE OpenGL::GL glm::glm)
+    target_link_libraries(${TARGET_NAME} PRIVATE OpenGL::GL glm)
 
     if(STATIC_GLEW)
         target_compile_definitions(${TARGET_NAME} PRIVATE GLEW_STATIC)
